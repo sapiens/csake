@@ -8,28 +8,7 @@ namespace CSake.Internals
 {
     public class ScriptWrapper
     {
-        private readonly IEnumerable<IInterpretLine> _interpretors;
-
-        public ScriptWrapper()
-        {
-            
-        }
-
-        //public ScriptWrapper(IEnumerable<IInterpretLine> interpretors)
-        //{
-        //    interpretors.MustNotBeNull();
-        //    _interpretors = interpretors;
-        //}
-
-        //IInterpretLine GetInterpretor(string data)
-        //{
-        //    var proc = _interpretors.FirstOrDefault(p => p.CanInterpret(data));
-        //    if (proc == null)
-        //    {
-        //        throw new InvalidOperationException("This line can't be identified");
-        //    }
-        //    return proc;
-        //}
+        public const string ClassName = "CSakeWrapper";
 
         public string Wrap(IReadLine data)
         {
@@ -54,7 +33,7 @@ namespace CSake.Internals
                     if (!IsPartOfHeader(line))
                     {
                         afterHeader = true;
-                        sb.AppendLine("public class CSakeWrapper{"); 
+                        sb.AppendLine("public class " + ClassName+"{"); 
                     }                    
                 }
                 sb.AppendLine(line);
