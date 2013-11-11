@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>CS-Script</id>
+    <version>3.6.7.0</version>
+    <title>CS-Script Class Library (CSScriptLibrary.dll)</title>
+    <authors>Oleg Shilo</authors>
+    <owners>Oleg Shilo</owners>
+    <licenseUrl>http://www.csscript.net/Licence.html</licenseUrl>
+    <projectUrl>http://www.csscript.net/</projectUrl>
+    <iconUrl>http://www.csscript.net/css_logo.ico</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Class Library assembly for the CS-Script engine. CS-Script is a CLR (Common Language Runtime) based scripting system which uses ECMA-compliant C# as a programming language.</description>
+    <releaseNotes>This is the major release with the support for the new hosting model based on the Mono "compile as service".</releaseNotes>
+    <copyright>Copyright (C) 2004-2013 Oleg Shilo</copyright>
+    <language>en-AU</language>
+    <tags>C# Scripting Dynamic C#</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Core" targetFramework=".NETFramework4.0.0.0" />
+      <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.0.0.0" />
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />
+    </frameworkAssemblies>
+  </metadata>
+</package>
