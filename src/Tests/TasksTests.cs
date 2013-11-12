@@ -18,6 +18,7 @@ namespace Tests
             _sut = new TasksManager(BuildAssembly());
         }
 
+      
         [Fact]
         public void identify_tasks()
         {

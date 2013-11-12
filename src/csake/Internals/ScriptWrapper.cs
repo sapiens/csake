@@ -62,12 +62,8 @@ namespace CSake.Internals
 
         void ExtractReference(string line)
         {
-            var name = line.Substring(4);
-            name = name.RemoveLastChar();
-            if (name.EndsWith("\""))
-            {
-                name = name.RemoveLastChar();
-            }
+            var namechars = line.Skip(4).TakeWhile(d => d != '"').ToArray();
+            var name = new string(namechars);
             _refs.Add(name);
         }
 

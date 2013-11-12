@@ -18,10 +18,16 @@ namespace CSake.Internals
 
         public void Run()
         {
+            foreach (var dep in Dependencies)
+            {
+                dep.Run();
+            }
             var sw = new Stopwatch();
+            "Executing '{0}'".WriteInfo(Name);
             sw.Start();
             _invoker.Invoke(string.Format("{0}.{1}", ScriptWrapper.ClassName, Name));
             sw.Stop();
+            Console.WriteLine();
             TimeTaken = sw.Elapsed;
         }
 

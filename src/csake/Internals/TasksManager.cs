@@ -33,7 +33,8 @@ namespace CSake.Internals
             IExecuteTask[] depTasks=new IExecuteTask[0];
             if (deps != null && deps.TaskNames.Length>0)
             {
-                depTasks = deps.TaskNames.Select(d => CreateSimpleTask(d)).ToArray();
+                //depTasks = deps.TaskNames.Select(d => CreateSimpleTask(d)).ToArray();
+                depTasks = deps.TaskNames.Select(GetTask).ToArray();
             }
             
             return new TaskExecutor(method.Name,_helper,depTasks);

@@ -53,20 +53,19 @@ namespace CSake
             {
                 task = _tasks.GetTask(taskName);
             }
-            var list = new List<ITaskExecuted>();
-            foreach (var dep in task.Dependencies)
-            {
-                "Executing '{0}'".WriteInfo(dep.Name);
-                dep.Run();
-                list.Add(dep);
-                Console.WriteLine();
-            }
-            
-            "Executing '{0}'".WriteInfo(task.Name);
+            var list = new List<ITaskExecuted>();             
             task.Run();
-            Console.WriteLine();
-            list.Add(task);
+            FillTimings(list,task);
             Timings = list;
+        }
+
+        static void FillTimings(List<ITaskExecuted> result, IExecuteTask current)
+        {
+            foreach (var dep in current.Dependencies)
+            {
+                FillTimings(result,dep);
+            }
+            result.Add(current);
         }
 
         public IEnumerable<ITaskExecuted> Timings

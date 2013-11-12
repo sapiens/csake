@@ -46,6 +46,12 @@ namespace CSake
                 executor.Run(task);
                 WriteTimes(executor.Timings);
             }
+
+            catch (NoDefaultTaskDefinedException)
+            {
+                "You haven't specified a task and there's no task marked as default.".WriteError();
+            }
+
             catch (Exception ex)
             {
                 ex.ToString().WriteError();
