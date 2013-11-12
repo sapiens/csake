@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Reflection;
-using CSake;
 using CSake.Internals;
 using Xunit;
 using System;

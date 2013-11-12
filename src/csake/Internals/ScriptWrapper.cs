@@ -9,6 +9,12 @@ namespace CSake.Internals
     public class ScriptWrapper
     {
         public const string ClassName = "CSakeWrapper";
+        private List<string> _refs=new List<string>();
+
+        public IEnumerable<string> ReferencedAssemblies
+        {
+            get { return _refs; }
+        }
 
         public string Wrap(IReadLine data)
         {
@@ -23,6 +29,13 @@ namespace CSake.Internals
                     sb.AppendLine();
                     continue;
                 }
+               
+                if (IsReference(line))
+                {
+                    ExtractReference(line);
+                    continue;
+                }
+
                 if (IsComment(line))
                 {
                     continue;
@@ -41,6 +54,23 @@ namespace CSake.Internals
             sb.Append("}");
             return sb.ToString();
         }
+
+        static bool IsReference(string line)
+        {
+            return line.StartsWith("#r");
+        }
+
+        void ExtractReference(string line)
+        {
+            var name = line.Substring(4);
+            name = name.RemoveLastChar();
+            if (name.EndsWith("\""))
+            {
+                name = name.RemoveLastChar();
+            }
+            _refs.Add(name);
+        }
+
         static Regex regex=new Regex(@"(using|#)+",RegexOptions.Compiled);
         static bool IsPartOfHeader(string line)
         {

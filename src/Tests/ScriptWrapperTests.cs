@@ -76,6 +76,35 @@ const int Data=23;
             asm.GetTypes().Count().Should().Be(2);
         }
 
+        [Fact]
+        public void identify_referenced_assemblies()
+        {
+            var code = @"
+#r ""my.dll"";
+using System;
+using Xunit;
+
+    //something
+    [Default]
+    public static void Clean()
+    {
+    }
+";
+            var result = _sut.Wrap(new CodeBlockReader(code));
+            result.Should().Be(@"
+using System;
+using Xunit;
+
+public class CSakeWrapper{
+[Default]
+public static void Clean()
+{
+}
+
+}");
+            _sut.ReferencedAssemblies.Should().Contain("my.dll");
+        }
+
         protected void Write(object format, params object[] param)
         {
             Console.WriteLine(format.ToString(), param);

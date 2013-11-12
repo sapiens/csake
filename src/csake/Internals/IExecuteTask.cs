@@ -1,14 +1,21 @@
+using System;
 using System.Collections.Generic;
 
 namespace CSake.Internals
 {
-    public interface IExecuteTask
+    public interface ITaskExecuted
+    {
+        string Name { get; }
+        TimeSpan TimeTaken { get; }
+    }
+
+    public interface IExecuteTask : ITaskExecuted
     {
         /// <summary>
-        /// Runs dependencies then task
+        /// Doesn't run dependencies
         /// </summary>
         void Run();
-        string Name { get; }
+
         IEnumerable<IExecuteTask> Dependencies { get; }
     }
 }

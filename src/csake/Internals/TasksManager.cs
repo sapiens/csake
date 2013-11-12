@@ -24,7 +24,11 @@ namespace CSake.Internals
 
         public IExecuteTask GetTask(string name)
         {
-            var method = _methods.First(d => d.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            var method = _methods.FirstOrDefault(d => d.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            if (method == null)
+            {
+                throw new InvalidOperationException("There's no task named {0}".ToFormat(name));
+            }
             var deps = method.GetSingleAttribute<DependsAttribute>();
             IExecuteTask[] depTasks=new IExecuteTask[0];
             if (deps != null && deps.TaskNames.Length>0)

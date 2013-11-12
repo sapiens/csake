@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CSake</RootNamespace>
-    <AssemblyName>CSake</AssemblyName>
+    <AssemblyName>csake</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -60,14 +60,16 @@
     <Compile Include="DefaultAttribute.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Internals\CodeBlockReader.cs" />
+    <Compile Include="Internals\FileReader.cs" />
     <Compile Include="Internals\IExecuteTask.cs" />
-    <Compile Include="Internals\IInterpretLine.cs" />
     <Compile Include="Internals\IReadLine.cs" />
     <Compile Include="Internals\LineType.cs" />
     <Compile Include="Internals\TaskExecutor.cs" />
+    <Compile Include="MsBuild.cs" />
     <Compile Include="NoDefaultTaskDefinedException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScriptExecutor.cs" />
     <Compile Include="Scripting.cs" />
     <Compile Include="Internals\ScriptWrapper.cs" />
     <Compile Include="Internals\TasksManager.cs" />
