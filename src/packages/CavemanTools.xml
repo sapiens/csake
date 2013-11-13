@@ -1218,6 +1218,12 @@
             </summary>
             <param name="version">major.minor.patch[-preRelease][+build]</param>
         </member>
+        <member name="M:CavemanTools.SemanticVersion.#ctor(System.Version,System.String,System.String)">
+            <summary>
+            Creates semantic version from Version
+            </summary>
+            <param name="version">The Revision number is ignored</param>
+        </member>
         <member name="M:System.EncryptionUtils.Sha256(System.String)">
             <summary>
             Hash a string using the SHA256 algorithm. 32 bytes (hex): 64 unicode chars, 128 bytes

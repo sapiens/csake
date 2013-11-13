@@ -2,9 +2,17 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
+using NuGet;
+using SemanticVersion = CavemanTools.SemanticVersion;
 
 namespace CSake
 {
+
+    public static class Current
+    {
+        public static FileInfo Script { get; set; }
+    }
     public static class Extensions
     {
         /// <summary>
@@ -47,7 +55,7 @@ namespace CSake
         /// Creates a directory
         /// </summary>
         /// <param name="dirName">Directory path</param>
-        public static void DirCreate(this string dirName)
+        public static void MkDir(this string dirName)
         {
             dirName.MustNotBeEmpty();
             Directory.CreateDirectory(dirName);
@@ -57,31 +65,37 @@ namespace CSake
         /// Deletes the specified directory
         /// </summary>
         /// <param name="dirName">Directory path</param>
-        public static void DirDelete(this string dirName)
+        public static void DeleteDir(this string dirName)
         {
             dirName.MustNotBeEmpty();
-            Directory.Delete(dirName, true);
+            if (Directory.Exists(dirName))
+            {
+                Directory.Delete(dirName, true);
+            }
         }
 
         /// <summary>
         /// Empties the specified directory
         /// </summary>
         /// <param name="dirName">Directory path</param>
-        public static void DirCleanup(this string dirName)
+        public static void CleanupDir(this string dirName)
         {
             dirName.MustNotBeEmpty();
-            Directory.Delete(dirName, true);
+            if (Directory.Exists(dirName))
+            {
+                Directory.Delete(dirName, true);
+            }
             Directory.CreateDirectory(dirName);
         }
 
         /// <summary>
-        /// Run executable with specified arguments. 
+        /// Runs executable with specified arguments. 
         /// No new window is created and all output goes to console.
         /// </summary>
         /// <param name="file">Executable name</param>
         /// <param name="args">Arguments list</param>
         /// <returns>Process exit code</returns>
-        public static int Exec(this string file, params string[] args)
+        public static int Exec(this string file,params string[] args)
         {
             using (var p = new Process())
             {
@@ -93,11 +107,32 @@ namespace CSake
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.RedirectStandardOutput = true;
-                p.Start();
-                Console.WriteLine(p.StandardOutput.ReadToEnd());
-                p.WaitForExit();
-                return p.ExitCode; 
+                p.StartInfo.RedirectStandardError = true;
+                "Executing: {0} {1}".ToConsole(file,p.StartInfo.Arguments);
+                p.ErrorDataReceived += p_ErrorDataReceived;
+                int result = -1;
+                try
+                {
+                    p.Start();
+                    p.BeginErrorReadLine();
+                    Console.WriteLine(p.StandardOutput.ReadToEnd());
+                    p.WaitForExit();
+                    result = p.ExitCode;
+                }
+                finally
+                {
+                    p.ErrorDataReceived -= p_ErrorDataReceived;
+                }
+                return result;
             }           
+        }
+
+        static void p_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (!e.Data.IsNullOrEmpty())
+            {
+                e.Data.WriteError();
+            }
         }
 
         /// <summary>
@@ -121,6 +156,71 @@ namespace CSake
             builder.Build();
         }
 
-        
+        /// <summary>
+        /// Loads the specified file as a nuspec file (nuget manifest)
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static NuSpecFile AsNuspec(this string filename)
+        {
+            return new NuSpecFile(filename);
+        }
+
+        /// <summary>
+        /// Treats the file as an assembly and returns its version
+        /// </summary>
+        /// <param name="filename">Path to assembly file</param>
+        /// <returns></returns>
+        public static Version GetAssemblyVersion(this string filename)
+        {
+            var f = new FileInfo(filename);
+            "Getting version from assembly '{0}'".ToConsole(f.FullName);
+            var name = AssemblyName.GetAssemblyName(f.FullName);
+            return name.Version;
+        }
+
+
+        /// <summary>
+        /// Creates a semantic version (http://semver.org/) from a Version allowing you to specify pre-release and build strings.
+        /// </summary>
+        /// <see cref="http://semver.org/"/>
+        /// <param name="version"></param>
+        /// <param name="preRelease">beta => 1.0.0-beta</param>
+        /// <param name="build">001 => 1.0.0-beta+001</param>
+        /// <returns></returns>
+        public static SemanticVersion ToSemanticVersion(this Version version, string preRelease = null,
+            string build = null)
+        {
+            version.MustNotBeNull();
+            return new SemanticVersion(version,preRelease,build);
+        }
+
+        public static void CreateNuget(this string file,string basePath,string outputDir)
+        {
+           "Creating nuget package from '{0}'".ToConsole(file);
+            if (outputDir.IsNullOrEmpty())
+            {
+                outputDir = Path.GetDirectoryName(file);
+            }
+
+            if (!Directory.Exists(outputDir))
+            {
+                Directory.CreateDirectory(outputDir);
+            }
+
+            string nugetFile = "";
+            using (var fs = File.Open(file, FileMode.Open))
+            {
+                var pack = new PackageBuilder(fs, Path.GetFullPath(basePath));
+                var nugetName = pack.Id + "." + pack.Version.ToString()+".nupkg";
+                nugetFile = Path.Combine(outputDir, nugetName);
+                using (var ws = File.Create(nugetFile))
+                {
+                    pack.Save(ws);
+                }
+
+            }
+            "Package '{0}' was successfuly created".WriteInfo(nugetFile);
+        }
 }
 }

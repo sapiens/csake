@@ -6,9 +6,10 @@ using System.Reflection;
 using CSake.Internals;
 using CSScriptLibrary;
 
+
 namespace CSake
 {
-    public class ScriptExecutor
+    public class ScriptExecutor:IDisposable
     {
         private TasksManager _tasks;
 
@@ -28,6 +29,7 @@ namespace CSake
             }
 
             var finfo = new FileInfo(filename);
+            Current.Script = finfo;
             var workingdir = finfo.DirectoryName;
             var refs = wrapper.ReferencedAssemblies.Select(d =>
             {
@@ -38,7 +40,10 @@ namespace CSake
                 }
                 return d;
             }).ToArray();
-            var asm = CSScript.LoadCode(code, refs);
+            var l = new List<string>(refs);
+            l.Add("NuGet.Core.dll");
+            l.Add("System.ComponentModel.DataAnnotations.dll");
+            var asm = CSScript.LoadCode(code, l.ToArray());
             return asm;
         }
 
@@ -57,6 +62,7 @@ namespace CSake
             task.Run();
             FillTimings(list,task);
             Timings = list;
+            Current.Script = null;
         }
 
         static void FillTimings(List<ITaskExecuted> result, IExecuteTask current)
@@ -71,6 +77,14 @@ namespace CSake
         public IEnumerable<ITaskExecuted> Timings
         {
             get; private set;
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            
         }
     }
 }
