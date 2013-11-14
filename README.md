@@ -4,7 +4,9 @@ Use C# in your build scripts.
 
 ##License
 
-Apache license 2.0
+Apache license 2.0. 
+
+CSake uses [CS Script engine](http://www.csscript.net/) to execute scripts
 
 
 #Getting Started
