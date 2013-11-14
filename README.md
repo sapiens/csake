@@ -1,7 +1,8 @@
-csake
-=====
+#C# Make
 
-C# Make. Use C# in your build scripts. Apache license 2.0
+Use C# in your build scripts.
+
+**License**: Apache license 2.0
 
 
 #Getting Started
