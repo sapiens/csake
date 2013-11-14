@@ -7,7 +7,7 @@ C# Make. Use C# in your build scripts. Apache license 2.0
 #Getting Started
 
 Get it from [Nuget](https://www.nuget.org/packages/CSake/).
-Bundled with it (in packages/csake1.0.0/tools) you can find 2 quick start files that you can copy (remove the '-sample' suffix from extension) and modify.
+Bundled with it (in packages/csake1.0.0/tools) you can find 2 quick start files that you can copy (remove the '-sample' suffix from extension) and use.
 
 Here how's a build script looks (this is the CSake build script).
 
