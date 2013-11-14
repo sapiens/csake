@@ -27,7 +27,12 @@ namespace CSake
             {
                 code = wrapper.Wrap(file);
             }
-
+#if DEBUG
+            var text = "//Found refs: ";
+            text += string.Join(",", wrapper.ReferencedAssemblies);
+            text += Environment.NewLine;
+            File.WriteAllText("wrappedcript.cs",text+code);
+#endif
             var finfo = new FileInfo(filename);
             Current.Script = finfo;
             var workingdir = finfo.DirectoryName;
@@ -43,7 +48,10 @@ namespace CSake
             var l = new List<string>(refs);
             l.Add("NuGet.Core.dll");
             l.Add("System.ComponentModel.DataAnnotations.dll");
-            var asm = CSScript.LoadCode(code, l.ToArray());
+            l.Add("CavemanTools.dll");
+            l.Add("System.Xml");
+            var asm = CSScript.LoadCode(code, l.ToArray() );
+            //var asm = CSScript.LoadCode(code, "NuGet.Core.dll", "System.ComponentModel.DataAnnotations.dll","CavemanTools.dll");
             return asm;
         }
 

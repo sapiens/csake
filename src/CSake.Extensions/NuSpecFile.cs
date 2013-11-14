@@ -62,7 +62,7 @@ namespace CSake
 
         /// <summary>
         /// Gets the manifest metadata
-        /// </summary>
+        /// </summary>        
         public ManifestMetadata Metadata
         {
             get

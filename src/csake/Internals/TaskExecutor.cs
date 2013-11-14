@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using CSScriptLibrary;
 
 namespace CSake.Internals
@@ -25,10 +26,22 @@ namespace CSake.Internals
             var sw = new Stopwatch();
             "Executing '{0}'".WriteInfo(Name);
             sw.Start();
-            _invoker.Invoke(string.Format("{0}.{1}", ScriptWrapper.ClassName, Name));
-            sw.Stop();
-            Console.WriteLine();
-            TimeTaken = sw.Elapsed;
+            try
+            {
+                _invoker.Invoke(string.Format("{0}.{1}", ScriptWrapper.ClassName, Name));
+                sw.Stop();
+                Console.WriteLine();
+                TimeTaken = sw.Elapsed;
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                foreach (var innerex in ex.LoaderExceptions)
+                {
+                    innerex.Message.WriteError();
+                }
+                throw;
+            }
+            
         }
 
         public string Name { get; private set; }

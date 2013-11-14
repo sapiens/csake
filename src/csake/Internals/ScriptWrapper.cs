@@ -9,7 +9,7 @@ namespace CSake.Internals
     public class ScriptWrapper
     {
         public const string ClassName = "CSakeWrapper";
-        private List<string> _refs=new List<string>();
+        private List<string> _refs = new List<string>();
 
         public IEnumerable<string> ReferencedAssemblies
         {
@@ -49,6 +49,7 @@ namespace CSake.Internals
                         sb.AppendLine("public class " + ClassName+"{"); 
                     }                    
                 }
+
                 sb.AppendLine(line);
             }
             sb.Append("}");
@@ -57,7 +58,7 @@ namespace CSake.Internals
 
         static bool IsReference(string line)
         {
-            return line.StartsWith("#r");
+            return line.StartsWith("#r");            
         }
 
         void ExtractReference(string line)
@@ -71,10 +72,11 @@ namespace CSake.Internals
         static bool IsPartOfHeader(string line)
         {
             return regex.IsMatch(line);
-        }
+        }       
 
         static bool IsComment(string line)
         {
+            
             return line.StartsWith("//");
         }
     }

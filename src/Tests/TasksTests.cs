@@ -76,7 +76,7 @@ public static void Build()
 }
 ";
             var wrapper = new ScriptWrapper();
-            return CSScriptLibrary.CSScript.LoadCode(wrapper.Wrap(new CodeBlockReader(code)));
+            return CSScriptLibrary.CSScript.LoadCode(wrapper.Wrap(new CodeBlockReader(code)),"CSake.Extensions.dll");
         }
 
         protected void Write(object format, params object[] param)

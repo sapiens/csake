@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csake", "csake\csake.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{372A7810-D7BB-4339-8240-73180545F144}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSake.Extensions", "CSake.Extensions\CSake.Extensions.csproj", "{4C6A000A-A117-4FA2-91FF-AAE092F0BEA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{372A7810-D7BB-4339-8240-73180545F144}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{372A7810-D7BB-4339-8240-73180545F144}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{372A7810-D7BB-4339-8240-73180545F144}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C6A000A-A117-4FA2-91FF-AAE092F0BEA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C6A000A-A117-4FA2-91FF-AAE092F0BEA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C6A000A-A117-4FA2-91FF-AAE092F0BEA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C6A000A-A117-4FA2-91FF-AAE092F0BEA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

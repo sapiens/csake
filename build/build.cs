@@ -3,27 +3,23 @@ using System.IO;
 using CSake;
 using NuGet;
 
-const string SlnFile=@"../src/csake.sln";
+const string SlnFile = @"../src/csake.sln";
 
-const string ReleaseDir=@"../src/csake/bin/Release";
+const string ReleaseDir = @"../src/csake/bin/Release";
 
-const string CSakeDir=@"../src/csake";
+const string CSakeDir = @"../src/csake";
 
-const string PackageDir=@"temp/package";
+const string PackageDir = @"temp/package";
 
-const string NugetBuildDir=@"temp/nuget";
+const string TempDir = @"temp";
 
-const string TempDir=@"temp";
-
-static string CurrentDir=Path.GetFullPath("./");
+static string CurrentDir = Path.GetFullPath("./");
 
 public static void CleanUp()
 {
     TempDir.CleanupDir();
-    SlnFile.MsBuildClean();         
-    
+    SlnFile.MsBuildClean();
 }
-
 
 [Depends("CleanUp")]
 public static void Build()
@@ -36,19 +32,27 @@ public static void Build()
 public static void Nuget()
 {
     PackageDir.MkDir();
-    NugetBuildDir.MkDir();
-      
     var nuspecFile=Path.Combine(CurrentDir,"csake.nuspec");
-    UpdateVersion(nuspecFile);
-    Path.Combine(NugetBuildDir,"csake.nuspec").CreateNuget(CSakeDir,PackageDir);    
+    UpdateVersion(nuspecFile,"csake.exe");
+    BuildNuget("csake",CSakeDir);
 }
 
-static void UpdateVersion(string nuspecFile)
+//basePath= relative path for package files source. Usually is the project dir
+static void BuildNuget(string nuspecFile,string basePath)
+{
+    if (!nuspecFile.EndsWith(".nuspec"))
+    {
+        nuspecFile+=".nuspec";
+    }
+    Path.Combine(TempDir,nuspecFile).CreateNuget(basePath,PackageDir);    
+}
+
+static void UpdateVersion(string nuspecFile,string assemblyName)
 {
     var nuspec=nuspecFile.AsNuspec();
    
-    nuspec.Metadata.Version=GetVersion("csake.exe");
-    nuspec.Save(NugetBuildDir);    
+    nuspec.Metadata.Version=GetVersion(assemblyName);
+    nuspec.Save(TempDir);    
 }
 
 static string GetVersion(string asmName)
