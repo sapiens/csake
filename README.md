@@ -2,7 +2,9 @@
 
 Use C# in your build scripts.
 
-**License**: Apache license 2.0
+##License
+
+Apache license 2.0
 
 
 #Getting Started
