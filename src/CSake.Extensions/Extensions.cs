@@ -22,7 +22,14 @@ namespace CSake
         /// <param name="args"></param>
         public static void ToConsole(this string data, params object[] args)
         {
-            Console.WriteLine(data, args);
+            if (args.Length == 0)
+            {
+                Console.WriteLine(data);
+            }
+            else
+            {
+                Console.WriteLine(data, args);
+            }
         }
 
         /// <summary>
@@ -34,7 +41,14 @@ namespace CSake
         {
             var old = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(data, args);
+            if (args.Length == 0)
+            {
+                Console.WriteLine(data);
+            }
+            else
+            {
+                Console.WriteLine(data, args);
+            }
             Console.ForegroundColor = old;
         }
 
@@ -47,7 +61,14 @@ namespace CSake
         {
             var old = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine(data, args);
+            if (args.Length == 0)
+            {
+                Console.WriteLine(data);
+            }
+            else
+            {
+                Console.WriteLine(data, args);
+            }
             Console.ForegroundColor = old;
         }
 
