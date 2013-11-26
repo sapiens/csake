@@ -3,6 +3,7 @@ using System.IO;
 using System.Security;
 using System.Text;
 using System.Xml;
+using CSake;
 using NuGet;
 using Xunit;
 using System;
@@ -19,8 +20,8 @@ namespace Tests
         {
 
         }
-
-        //[Fact]
+        const string NuspecFile=@"../../test.nuspec";
+        [Fact]
         public void test()
         {
             var data = @"<?xml version=""1.0""?>
@@ -47,37 +48,8 @@ namespace Tests
     </files>
 </package>";
 
-            Manifest om;
-            using (var ms = new MemoryStream())
-            {
-                var buffer = UnicodeEncoding.Default.GetBytes(data);
-                ms.Write(buffer,0,buffer.Length);
-                ms.Seek(0, SeekOrigin.Begin);
-                om = Manifest.ReadFrom(ms,false);
-            }
-            
-
-            
-            var manifest = new Manifest();
-            manifest.Metadata.Id = "haa";
-            manifest.Metadata.Version = "1.0.0";
-            manifest.Metadata.Authors = "bla";
-            manifest.Metadata.Description = "desc";
-            manifest.Files=new List<ManifestFile>();
-            manifest.Files.Add(new ManifestFile()
-            {
-                Source = "bla",Target="lib"
-            });
-
-            string result = "";
-            using (var m = new MemoryStream())
-                {
-                    manifest.Save(m);
-                    m.Seek(0, SeekOrigin.Begin);
-                    result=m.ReadAsString();
-                }
-                
-            Write(result);
+            var nuspec = new NuSpecFile(NuspecFile);
+            nuspec.AddDependency("bla","123");
         }
 
         protected void Write(object format, params object[] param)

@@ -55,6 +55,7 @@ namespace CSake
             if (set == null)
             {
                 set=new ManifestDependencySet(){TargetFramework = framework};
+                set.Dependencies=new List<ManifestDependency>();
                 Metadata.DependencySets.Add(set);
             }
             return set;
