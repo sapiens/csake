@@ -27,6 +27,7 @@ public static void Build()
     SlnFile.MsBuildRelease();
 }
 
+
 [Default]
 [Depends("Build")]
 public static void Nuget()

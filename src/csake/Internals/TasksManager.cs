@@ -10,7 +10,7 @@ namespace CSake.Internals
     {
         private Assembly _asm;
         private IEnumerable<MethodInfo> _methods;
-        private AsmHelper _helper;
+      //  private AsmHelper _helper;
 
         public TasksManager(Assembly asm)
         {
@@ -19,7 +19,7 @@ namespace CSake.Internals
             _methods =
                 wrapper.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly |
                                    BindingFlags.IgnoreCase).Where(m=>m.GetParameters().Length==0);
-            _helper = new AsmHelper(_asm);
+            
         }
 
         public IExecuteTask GetTask(string name)
@@ -37,13 +37,13 @@ namespace CSake.Internals
                 depTasks = deps.TaskNames.Select(GetTask).ToArray();
             }
             
-            return new TaskExecutor(method.Name,_helper,depTasks);
+            return new TaskExecutor(method.Name,_asm,depTasks);
         }
 
-        IExecuteTask CreateSimpleTask(string name)
-        {
-            return new TaskExecutor(name, _helper);
-        }
+        //IExecuteTask CreateSimpleTask(string name)
+        //{
+        //    return new TaskExecutor(name, _helper);
+        //}
 
         public IExecuteTask GetDefaultTask()
         {

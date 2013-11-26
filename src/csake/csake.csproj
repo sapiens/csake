@@ -47,6 +47,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SkipIfAttribute.cs" />
     <None Include="build.cs-sample">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

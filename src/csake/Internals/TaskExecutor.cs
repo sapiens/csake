@@ -6,19 +6,50 @@ using CSScriptLibrary;
 
 namespace CSake.Internals
 {
-    class TaskExecutor : IExecuteTask
+   class TaskExecutor : IExecuteTask
     {
-        private readonly AsmHelper _invoker;
+       private readonly Assembly _asm;
+       private readonly AsmHelper _invoker;
 
-        public TaskExecutor(string name,AsmHelper invoker,params IExecuteTask[] deps)
+        public TaskExecutor(string name,Assembly asm,params IExecuteTask[] deps)
         {
-            _invoker = invoker;
+            _asm = asm;
+
+            _invoker = new AsmHelper(asm);
             Name = name;
             Dependencies = deps;
         }
 
+       bool Skip()
+       {
+
+           var info = _asm.GetType(ScriptWrapper.ClassName).GetMethod(Name,BindingFlags.Static|BindingFlags.Public);
+           info.Name.ToString().ToConsole();
+            var skip = info.GetSingleAttribute<SkipIfAttribute>();
+            if (skip != null)
+            {
+                if (skip.Always) return true;
+                var field=info.DeclaringType.GetField(skip.FieldName, BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Static);
+                var value = field.GetValue(null);
+                if (skip.FieldValue != null)
+                {
+                    if (value == null) return false;
+                    return skip.FieldValue.ToString() == value.ToString();
+                }
+            }
+           return false;
+       }
+
         public void Run()
         {
+            var methodName = string.Format("{0}.{1}", ScriptWrapper.ClassName, Name);
+
+            if (Skip())
+            {
+                "Skipping task {0}".WriteInfo(Name);
+                return;
+            }
+
             foreach (var dep in Dependencies)
             {
                 dep.Run();
@@ -28,7 +59,8 @@ namespace CSake.Internals
             sw.Start();
             try
             {
-                _invoker.Invoke(string.Format("{0}.{1}", ScriptWrapper.ClassName, Name));
+                
+                _invoker.Invoke(methodName);
                 sw.Stop();
                 Console.WriteLine();
                 TimeTaken = sw.Elapsed;
