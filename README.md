@@ -2,6 +2,8 @@
 
 Use C# in your build scripts.
 
+Latest version: [1.1.0](https://github.com/sapiens/csake/wiki/ChangeLog)
+
 ##License
 
 Apache license 2.0. 
@@ -41,11 +43,18 @@ Here how's a build script looks (this is the CSake build script).
 		SlnFile.MsBuildClean();
 	}
 
+	static string Condition="test";
+
+	//task runs if Condition is not 'test'. 
+	//Any static field can be used but the field type should be a primitive (bool, string, int etc)
+	[SkipIf("Condition","test")]
 	[Depends("CleanUp")]
 	public static void Build()
 	{
 		SlnFile.MsBuildRelease();
 	}
+
+    
 
 	[Default]
 	[Depends("Build")]
