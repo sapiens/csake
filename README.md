@@ -1,3 +1,5 @@
+# No longer maintained
+
 ##C# Make
 
 Use C# in your build scripts.
